@@ -4,12 +4,15 @@ import 'package:todolist/services/api.dart';
 
 class CardTask extends StatefulWidget {
   final int index;
-  TaskModel task;
+  final TaskModel task;
+
+  final Function(TaskModel) onChange;
 
   CardTask({
     super.key,
     required this.index,
     required this.task,
+    required this.onChange,
   });
 
   @override
@@ -18,14 +21,15 @@ class CardTask extends StatefulWidget {
 
 class _CardTaskState extends State<CardTask> {
   final apiService = APIService();
+
   late TaskModel task = widget.task;
 
   _switchTaskStatus() {
     setState(() {
       task.completed = !task.completed;
     });
-    
-    apiService.post('/tasks/${widget.index}', T);
+
+    widget.onChange(task);
   }
 
   @override
@@ -44,24 +48,23 @@ class _CardTaskState extends State<CardTask> {
             task.completed ? Icons.task_alt_outlined : Icons.pending_outlined,
             color: task.completed ? Colors.lightGreen : Colors.orangeAccent,
           ),
-          Text(task.description),
+          Expanded(flex: 2, child: Text(task.description)),
           Expanded(child: Container()),
           ElevatedButton(
             onPressed: _switchTaskStatus,
             style: ElevatedButton.styleFrom(
-              backgroundColor: task.completed ? Colors.redAccent : Colors.lightGreen,
+              backgroundColor:
+                  task.completed ? Colors.redAccent : Colors.lightGreen,
               overlayColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
-              )
-            ),
-            child: Text(
-              widget.task.completed ? 'Uncheck' : 'Complete', 
-              style: TextStyle(
-                color: Colors.white
               ),
             ),
-          )
+            child: Text(
+              widget.task.completed ? 'Uncheck' : 'Complete',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ],
       ),
     );

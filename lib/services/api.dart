@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart';
 
 class APIService {
@@ -16,19 +15,12 @@ class APIService {
       return responseObject;
     }
 
-    return throw("APIService.get Error: $response");
+    return throw ("APIService.get Error: $response");
   }
 
-  post(String url, String data) async {
+  post(String url, Object data) async {
     final uri = _path(url);
-    final response = await Client().post(
-      uri, 
-      body: json.encode(data),
-    );
-
-    print("!!!! URI: $uri");
-    print("!!! Response.status: ${response.statusCode}");
-    print("!!!!!!!!! Response: ${response.body}");
+    final response = await Client().post(uri, body: jsonEncode(data));
 
     if (response.statusCode == 200) {
       return response;
