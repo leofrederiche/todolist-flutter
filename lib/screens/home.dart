@@ -36,9 +36,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     });
   }
 
-  _updateTaskList(TaskModel taskUpdated) async {
+  _updateTask(TaskModel taskUpdated) {
+    setState(() {
+      taskList = taskList.map((task) => task.id == taskUpdated.id ? taskUpdated : task).toList();
+    });
+    
+    _postTaskList();
+  }
+
+  _deleteTask(TaskModel taskToDelete) {
+    setState(() {
+      taskList = taskList.where((task) => task.id != taskToDelete.id).toList();
+    });
+    _postTaskList();
+  }
+
+  _postTaskList() async {
     try {
-      taskList.map((task) => task.id == taskUpdated.id ? taskUpdated : task).toList();
       final Object taskResponse = {
         "tasks": taskList.map((task) => task.toJson()).toList()
       };
@@ -55,32 +69,29 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       body: Container(
         padding: EdgeInsets.all(32),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 0,
-              child: Text(
-                'Todo-List Flutter APP',
-                style: AppTextStyle().textTitleStyle,
-              ),
+            Container(padding: EdgeInsets.all(16)),
+            Text('Todo-List',
+              style: AppTextStyle().textTitleStyle,
+              textAlign: TextAlign.left,
             ),
             Expanded(
-              flex: 1,
               child: ListView.builder(
+                padding: EdgeInsets.all(0),
                 itemCount: taskList.length,
                 itemBuilder: (context, index) {
                   final task = taskList[index];
-                  return Center(
-                    child: CardTask(
-                      index: index,
-                      task: task,
-                      onChange: _updateTaskList,
-                    ),
+                  return CardTask(
+                    index: index,
+                    task: task,
+                    onChange: _updateTask,
+                    onDelete: _deleteTask,
                   );
                 },
               ),
             ),
             Expanded(
-              flex: 1,
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {

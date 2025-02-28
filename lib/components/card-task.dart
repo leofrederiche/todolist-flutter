@@ -7,12 +7,14 @@ class CardTask extends StatefulWidget {
   final TaskModel task;
 
   final Function(TaskModel) onChange;
+  final Function(TaskModel) onDelete;
 
   CardTask({
     super.key,
     required this.index,
     required this.task,
     required this.onChange,
+    required this.onDelete,
   });
 
   @override
@@ -24,12 +26,16 @@ class _CardTaskState extends State<CardTask> {
 
   late TaskModel task = widget.task;
 
-  _switchTaskStatus() {
+  onChangeTaskCompleted(bool? newValue) {
     setState(() {
-      task.completed = !task.completed;
+      task.completed = newValue ?? false;
     });
 
     widget.onChange(task);
+  }
+
+  onDeleteTask() {
+    widget.onDelete(task);
   }
 
   @override
@@ -38,33 +44,39 @@ class _CardTaskState extends State<CardTask> {
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.blueGrey, style: BorderStyle.solid),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        border: Border(bottom: BorderSide(
+          color: Colors.blueGrey,
+          style: BorderStyle.solid
+        )),
       ),
       child: Row(
         spacing: 16,
         children: [
-          Icon(
-            task.completed ? Icons.task_alt_outlined : Icons.pending_outlined,
-            color: task.completed ? Colors.lightGreen : Colors.orangeAccent,
-          ),
-          Expanded(flex: 2, child: Text(task.description)),
-          Expanded(child: Container()),
-          ElevatedButton(
-            onPressed: _switchTaskStatus,
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  task.completed ? Colors.redAccent : Colors.lightGreen,
-              overlayColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+          Transform.scale(
+            scale: 1.4,
+            child: Checkbox(
+              visualDensity: VisualDensity.compact,
+              activeColor: Colors.blueGrey.shade400,
+              shape: CircleBorder(),
+              value: widget.task.completed,
+              onChanged: onChangeTaskCompleted,
             ),
+          ),
+          
+          Expanded(
+            flex: 1, 
             child: Text(
-              widget.task.completed ? 'Uncheck' : 'Complete',
-              style: TextStyle(color: Colors.white),
-            ),
+              task.description, 
+              style: TextStyle(
+                color: Colors.blueGrey.shade700
+              )
+            )
           ),
+          IconButton(
+            icon: Icon(Icons.delete_outline_rounded),
+            color: Colors.redAccent,
+            onPressed: onDeleteTask,
+          )
         ],
       ),
     );
