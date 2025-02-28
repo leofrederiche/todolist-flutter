@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/components/card-task.dart';
+import 'package:todolist/components/input-new-task.dart';
 import 'package:todolist/models/task-model.dart';
-import 'package:todolist/screens/tasks/task-new.dart';
 import 'package:todolist/services/api.dart';
 import 'package:todolist/styles/text-style.dart';
 
@@ -51,6 +51,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     _postTaskList();
   }
 
+  _insertTask(String description) {
+    final newId = taskList.last.id + 1;
+    final newTask = TaskModel(id: newId, description: description);
+
+    setState(() {
+      taskList.add(newTask);
+      _postTaskList();
+    });
+  }
+
   _postTaskList() async {
     try {
       final Object taskResponse = {
@@ -76,6 +86,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               style: AppTextStyle().textTitleStyle,
               textAlign: TextAlign.left,
             ),
+            InputNewTask(onAdd: _insertTask),
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.all(0),
@@ -89,19 +100,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     onDelete: _deleteTask,
                   );
                 },
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TaskNewPage()),
-                    ).whenComplete(() => setState(() {}));
-                  },
-                  child: Text('Add Task'),
-                ),
               ),
             ),
           ],
