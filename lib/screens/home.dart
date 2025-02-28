@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 itemBuilder: (context, index) {
                   final task = taskList[index];
                   return CardTask(
+                    key: ValueKey(task.id),
                     index: index,
                     task: task,
                     onChange: _updateTask,
