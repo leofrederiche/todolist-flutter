@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/components/card-task.dart';
-import 'package:todolist/components/input-new-task.dart';
-import 'package:todolist/models/task-model.dart';
+import 'package:todolist/components/card_task.dart';
+import 'package:todolist/components/input_new_task.dart';
+import 'package:todolist/models/task_model.dart';
 import 'package:todolist/services/api.dart';
-import 'package:todolist/styles/text-style.dart';
+import 'package:todolist/styles/text_style.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,9 +38,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   _updateTask(TaskModel taskUpdated) {
     setState(() {
-      taskList = taskList.map((task) => task.id == taskUpdated.id ? taskUpdated : task).toList();
+      taskList =
+          taskList
+              .map((task) => task.id == taskUpdated.id ? taskUpdated : task)
+              .toList();
     });
-    
+
     _postTaskList();
   }
 
@@ -64,7 +67,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   _postTaskList() async {
     try {
       final Object taskResponse = {
-        "tasks": taskList.map((task) => task.toJson()).toList()
+        "tasks": taskList.map((task) => task.toJson()).toList(),
       };
 
       await apiService.post('/', taskResponse);
@@ -82,7 +85,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(padding: EdgeInsets.all(16)),
-            Text('Todo-List',
+            Text(
+              'Todo-List',
               style: AppTextStyle().textTitleStyle,
               textAlign: TextAlign.left,
             ),

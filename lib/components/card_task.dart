@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/models/task-model.dart';
+import 'package:todolist/models/task_model.dart';
 import 'package:todolist/services/api.dart';
 
 class CardTask extends StatefulWidget {
@@ -26,7 +26,7 @@ class _CardTaskState extends State<CardTask> {
 
   late TaskModel task = widget.task;
 
-  onChangeTaskCompleted(bool? newValue) {
+  _onChangeTaskCompleted(bool? newValue) {
     setState(() {
       task.completed = newValue ?? false;
     });
@@ -34,7 +34,7 @@ class _CardTaskState extends State<CardTask> {
     widget.onChange(task);
   }
 
-  onDeleteTask() {
+  _onDeleteTask() {
     widget.onDelete(task);
   }
 
@@ -44,10 +44,9 @@ class _CardTaskState extends State<CardTask> {
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(
-          color: Colors.blueGrey,
-          style: BorderStyle.solid
-        )),
+        border: Border(
+          bottom: BorderSide(color: Colors.blueGrey, style: BorderStyle.solid),
+        ),
       ),
       child: Row(
         spacing: 16,
@@ -59,24 +58,22 @@ class _CardTaskState extends State<CardTask> {
               activeColor: Colors.blueGrey.shade400,
               shape: CircleBorder(),
               value: widget.task.completed,
-              onChanged: onChangeTaskCompleted,
+              onChanged: _onChangeTaskCompleted,
             ),
           ),
-          
+
           Expanded(
-            flex: 1, 
+            flex: 1,
             child: Text(
-              task.description, 
-              style: TextStyle(
-                color: Colors.blueGrey.shade700
-              )
-            )
+              task.description,
+              style: TextStyle(color: Colors.blueGrey.shade700),
+            ),
           ),
           IconButton(
             icon: Icon(Icons.delete_outline_rounded),
             color: Colors.redAccent,
-            onPressed: onDeleteTask,
-          )
+            onPressed: _onDeleteTask,
+          ),
         ],
       ),
     );

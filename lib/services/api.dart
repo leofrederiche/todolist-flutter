@@ -9,21 +9,29 @@ class APIService {
   }
 
   get(String url) async {
-    final response = await Client().get(_path(url));
-    if (response.statusCode == 200) {
-      final responseObject = json.decode(response.body);
-      return responseObject;
-    }
+    try {
+      final response = await Client().get(_path(url));
+      if (response.statusCode == 200) {
+        final responseObject = json.decode(response.body);
+        return responseObject;
+      }
 
-    return throw ("APIService.get Error: $response");
+      return throw ("APIService.get Error: $response");
+    } catch (error) {
+      throw ("APIService.get Error: $error");
+    }
   }
 
   post(String url, Object data) async {
-    final uri = _path(url);
-    final response = await Client().post(uri, body: jsonEncode(data));
+    try {
+      final uri = _path(url);
+      final response = await Client().post(uri, body: jsonEncode(data));
 
-    if (response.statusCode == 200) {
-      return response;
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } catch (error) {
+      throw ("APIService.post Error: $error");
     }
   }
 }

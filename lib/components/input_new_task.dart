@@ -3,21 +3,17 @@ import 'package:flutter/material.dart';
 class InputNewTask extends StatefulWidget {
   final Function(String) onAdd;
 
-  const InputNewTask({
-    super.key, 
-    required this.onAdd
-  });
+  const InputNewTask({super.key, required this.onAdd});
 
   @override
   State<InputNewTask> createState() => _InputNewTaskState();
 }
 
 class _InputNewTaskState extends State<InputNewTask> {
-
   final descriptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  onAdd() {
+  _onAdd() {
     widget.onAdd(descriptionController.text);
     descriptionController.clear();
   }
@@ -25,7 +21,7 @@ class _InputNewTaskState extends State<InputNewTask> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey, 
+      key: formKey,
       child: Row(
         children: [
           Expanded(
@@ -33,7 +29,7 @@ class _InputNewTaskState extends State<InputNewTask> {
               controller: descriptionController,
               decoration: InputDecoration(
                 labelText: 'Task description',
-                hintText: 'Wash dish'
+                hintText: 'Wash dish',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -42,21 +38,23 @@ class _InputNewTaskState extends State<InputNewTask> {
 
                 return null;
               },
-            )
+            ),
           ),
           ElevatedButton(
-            onPressed: (){
+            onPressed: () {
               if (formKey.currentState!.validate()) {
-                onAdd();
+                _onAdd();
               }
-            }, 
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blueAccent.shade400,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
             child: Text("ADD"),
-          )
+          ),
         ],
       ),
     );
