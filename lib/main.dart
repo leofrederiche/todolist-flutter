@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/screens/home.dart';
+import 'package:provider/provider.dart';
+import 'package:todolist/views/home/home_view.dart';
+import 'package:todolist/views/home/home_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage()
+      home: ChangeNotifierProvider(
+        create: (context) => HomeController(), 
+        child: HomeView()
+      )
     );
   }
 }
