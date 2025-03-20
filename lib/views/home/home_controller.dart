@@ -6,11 +6,14 @@ class HomeController extends ChangeNotifier {
   APIService apiService = APIService();
   List<TaskModel> taskList = [];
 
+  bool isLoadingTaskList = false;
+
   HomeController() {
     fetchTaskList();
   }
 
   Future<void> fetchTaskList() async {
+    isLoadingTaskList = true;
     notifyListeners();
 
     try {
@@ -21,6 +24,7 @@ class HomeController extends ChangeNotifier {
     } catch (error) {
       print("Error on fetch tasks: $error");
     } finally {
+      isLoadingTaskList = false;
       notifyListeners();
     }
   }
