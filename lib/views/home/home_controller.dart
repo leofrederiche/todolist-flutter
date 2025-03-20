@@ -51,9 +51,9 @@ class HomeController extends ChangeNotifier {
     _postTaskList();
   }
 
-  void deleteTask(TaskModel taskToDelete) {
+  Future<void> deleteTask(TaskModel taskToDelete) async {
     taskList = taskList.where((task) => task.id != taskToDelete.id).toList();
-    _postTaskList();
+    await _postTaskList();
   }
 
   void insertTask(String description) {

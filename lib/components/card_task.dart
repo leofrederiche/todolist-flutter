@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/components/content_loading.dart';
 import 'package:todolist/models/task_model.dart';
 import 'package:todolist/services/api.dart';
 
@@ -7,7 +8,7 @@ class CardTask extends StatefulWidget {
   final TaskModel task;
 
   final Function(TaskModel) onChange;
-  final Function(TaskModel) onDelete;
+  final Future<void> Function(TaskModel) onDelete;
 
   CardTask({
     super.key,
@@ -25,6 +26,7 @@ class _CardTaskState extends State<CardTask> {
   final apiService = APIService();
 
   late TaskModel task = widget.task;
+  bool isLoadingDelete = false;
 
   _onChangeTaskCompleted(bool? newValue) {
     setState(() {
@@ -34,8 +36,16 @@ class _CardTaskState extends State<CardTask> {
     widget.onChange(task);
   }
 
-  _onDeleteTask() {
-    widget.onDelete(task);
+  _onDeleteTask() async {
+    setState(() {
+      isLoadingDelete = true;
+    });
+
+    await widget.onDelete(task);
+    
+    setState((){
+      isLoadingDelete = false;
+    });
   }
 
   @override
@@ -69,7 +79,7 @@ class _CardTaskState extends State<CardTask> {
               style: TextStyle(color: Colors.blueGrey.shade700),
             ),
           ),
-          IconButton(
+          (isLoadingDelete) ? ContentLoading(isSmall: true) : IconButton(
             icon: Icon(Icons.delete_outline_rounded),
             color: Colors.redAccent,
             onPressed: _onDeleteTask,
