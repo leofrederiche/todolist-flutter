@@ -4,7 +4,6 @@ import 'package:todolist/models/task_model.dart';
 import 'package:todolist/services/api.dart';
 
 class CardTask extends StatefulWidget {
-  final int index;
   final TaskModel task;
 
   final Function(TaskModel) onChange;
@@ -12,7 +11,6 @@ class CardTask extends StatefulWidget {
 
   CardTask({
     super.key,
-    required this.index,
     required this.task,
     required this.onChange,
     required this.onDelete,
@@ -26,7 +24,7 @@ class _CardTaskState extends State<CardTask> {
   final apiService = APIService();
 
   late TaskModel task = widget.task;
-  bool isLoadingDelete = false;
+  late bool isLoadingDelete = task.id % 2 == 0;
 
   _onChangeTaskCompleted(bool? newValue) {
     setState(() {
@@ -42,8 +40,8 @@ class _CardTaskState extends State<CardTask> {
     });
 
     await widget.onDelete(task);
-    
-    setState((){
+
+    setState(() {
       isLoadingDelete = false;
     });
   }
@@ -60,6 +58,8 @@ class _CardTaskState extends State<CardTask> {
       ),
       child: Row(
         spacing: 16,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Transform.scale(
             scale: 1.4,
@@ -73,16 +73,22 @@ class _CardTaskState extends State<CardTask> {
           ),
 
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Text(
               task.description,
               style: TextStyle(color: Colors.blueGrey.shade700),
             ),
           ),
-          (isLoadingDelete) ? ContentLoading(isSmall: true) : IconButton(
-            icon: Icon(Icons.delete_outline_rounded),
-            color: Colors.redAccent,
-            onPressed: _onDeleteTask,
+          Container(
+            width: 40,
+            child: (isLoadingDelete)
+              ? ContentLoading(isSmall: true)
+              : IconButton(
+                  alignment: Alignment.centerRight,
+                  icon: Icon(Icons.delete_outline_rounded),
+                  color: Colors.redAccent,
+                  onPressed: _onDeleteTask,
+                ),
           ),
         ],
       ),
