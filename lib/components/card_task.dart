@@ -24,7 +24,7 @@ class _CardTaskState extends State<CardTask> {
   final apiService = APIService();
 
   late TaskModel task = widget.task;
-  late bool isLoadingDelete = task.id % 2 == 0;
+  late bool isLoadingDelete = false;
 
   _onChangeTaskCompleted(bool? newValue) {
     setState(() {
