@@ -82,7 +82,7 @@ class _CardTaskState extends State<CardTask> {
           Container(
             width: 40,
             child: (isLoadingDelete)
-              ? ContentLoading(isSmall: true)
+              ? ContentLoading(isSmall: true, color: Colors.redAccent)
               : IconButton(
                   alignment: Alignment.centerRight,
                   icon: Icon(Icons.delete_outline_rounded),

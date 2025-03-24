@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class ContentLoading extends StatelessWidget {
   final bool isSmall;
+  final Color color;
 
   const ContentLoading({ 
     super.key,
     this.isSmall = false,
+    this.color = Colors.blueAccent,
   });
 
   @override
@@ -15,7 +17,9 @@ class ContentLoading extends StatelessWidget {
       child: SizedBox(
         width: (isSmall) ? 20 : 30,
         height: (isSmall) ? 20 : 30,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: color,
+        ),
       )
     );
   }
